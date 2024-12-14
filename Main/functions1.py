@@ -26,6 +26,10 @@ class ModelPipelineWithResampling:
         # Cross-validation
         self.kfold = KFold(n_splits=5, shuffle=True, random_state=42)
 
+        # Attributes to store GridSearchCV and the best model
+        self.grid_search = None
+        self.best_model = None
+
     def fit_and_evaluate(self, X_train, y_train, X_test, y_test):
         """
         Train and evaluate the model in three scenarios: oversampling, undersampling, and without resampling.
@@ -48,7 +52,7 @@ class ModelPipelineWithResampling:
 
         for scenario, steps in scenarios.items():
             pipeline = Pipeline(steps=steps)
-            grid_search = GridSearchCV(
+            self.grid_search = GridSearchCV(
                 estimator=pipeline,
                 param_grid=self.param_grid,
                 cv=self.kfold,
@@ -56,11 +60,11 @@ class ModelPipelineWithResampling:
                 n_jobs=-1
             )
 
-            grid_search.fit(X_train, y_train)
-            best_model = grid_search.best_estimator_
+            self.grid_search.fit(X_train, y_train)
+            self.best_model = self.grid_search.best_estimator_
 
             # Evaluate on test data
-            y_test_pred = best_model.predict(X_test)
+            y_test_pred = self.best_model.predict(X_test)
             f1 = f1_score(y_test, y_test_pred)
 
             results.append({
@@ -69,8 +73,19 @@ class ModelPipelineWithResampling:
             })
 
             print(f"Scenario: {scenario}")
-            print(f"Best Parameters: {grid_search.best_params_}")
+            print(f"Best Parameters: {self.grid_search.best_params_}")
             print("Classification Report:")
             print(classification_report(y_test, y_test_pred))
 
         return pd.DataFrame(results)
+
+    def get_best_model(self):
+        """
+        Retrieve the best model from the GridSearchCV after training.
+
+        Returns:
+            The best model found during GridSearchCV.
+        """
+        if self.best_model is None:
+            raise ValueError("The model has not been trained yet. Call fit_and_evaluate() first.")
+        return self.best_model
