@@ -20,8 +20,8 @@ class ModelPipelineWithResampling:
         self.scoring = scoring
 
         # Resampling techniques
-        self.smote = SMOTE(sampling_strategy=0.999, random_state=42)
-        self.undersample = RandomUnderSampler(sampling_strategy=0.999, random_state=42)
+        self.smote = SMOTE(sampling_strategy=1, random_state=42)
+        self.undersample = RandomUnderSampler(sampling_strategy=1, random_state=42)
 
         # Cross-validation
         self.kfold = KFold(n_splits=5, shuffle=True, random_state=42)
