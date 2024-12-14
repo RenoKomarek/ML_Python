@@ -1,3 +1,8 @@
+# Prompt 1: "how do i make a pipeline to implement kfold and gridsearch alongside and ml model training like lr"
+# ChatGPT, 2024, Prompt 1: https://chatgpt.com/share/675c2ac6-e4bc-8001-8b96-aa8f5c2a3d5e
+# Prompt 2: "can you turn this into a class and show me how to use it"
+# ChatGPT, 2024, Prompt 2: https://chatgpt.com/share/675c2ac6-e4bc-8001-8b96-aa8f5c2a3d5e
+
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.metrics import f1_score, classification_report
